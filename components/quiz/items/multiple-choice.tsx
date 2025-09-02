@@ -26,7 +26,7 @@ export function MultipleChoiceQuestion({
   };
 
   const isCorrect = selectedOption === question.correctAnswer;
-  const showCorrectAnswer = showResults && question.correctAnswer;
+  // const showCorrectAnswer = showResults && question.correctAnswer;
 
   return (
     <div className="space-y-4">

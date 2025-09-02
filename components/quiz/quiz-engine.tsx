@@ -9,7 +9,7 @@ import {
 } from "@/lib/course-data/step2.quiz";
 import { fetchStep4Quiz as fetchStep4Data } from "@/lib/course-data/step4.quiz";
 import { CheckCircle, Clock, XCircle } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FillBlankQuestion } from "./items/fill-blank";
 import { MatchingQuestion } from "./items/matching";
 import { MultipleChoiceQuestion } from "./items/multiple-choice";
@@ -24,7 +24,9 @@ export default function QuizEngine({ stepNumber }: QuizEngineProps) {
   const [quizData, setQuizData] = useState<QuizData | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, any>>({});
+  const [answers, setAnswers] = useState<
+    Record<string, string | boolean | Record<string, string> | string[]>
+  >({});
   const [showResults, setShowResults] = useState(false);
   const [timeLeft, setTimeLeft] = useState<number | null>(null);
 
@@ -68,14 +70,20 @@ export default function QuizEngine({ stepNumber }: QuizEngineProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [timeLeft, showResults]);
+  }, [showResults]); // Remove timeLeft from dependencies
 
-  const handleAnswer = (questionId: string, answer: any) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [questionId]: answer,
-    }));
-  };
+  const handleAnswer = useCallback(
+    (
+      questionId: string,
+      answer: string | boolean | Record<string, string> | string[]
+    ) => {
+      setAnswers((prev) => ({
+        ...prev,
+        [questionId]: answer,
+      }));
+    },
+    []
+  );
 
   const nextQuestion = () => {
     if (currentQuestionIndex < (quizData?.questions.length || 0) - 1) {
@@ -122,24 +130,54 @@ export default function QuizEngine({ stepNumber }: QuizEngineProps) {
   };
 
   const renderQuestion = (question: QuizQuestion) => {
-    const commonProps = {
-      question,
-      answer: answers[question.id],
-      onAnswer: (answer: any) => handleAnswer(question.id, answer),
-      showResults,
-    };
+    const answer = answers[question.id];
 
     switch (question.type) {
       case "multiple-choice":
-        return <MultipleChoiceQuestion {...commonProps} />;
+        return (
+          <MultipleChoiceQuestion
+            question={question}
+            answer={answer as string | undefined}
+            onAnswer={(answer: string) => handleAnswer(question.id, answer)}
+            showResults={showResults}
+          />
+        );
       case "true-false":
-        return <TrueFalseQuestion {...commonProps} />;
+        return (
+          <TrueFalseQuestion
+            question={question}
+            answer={answer as string | undefined}
+            onAnswer={(answer: string) => handleAnswer(question.id, answer)}
+            showResults={showResults}
+          />
+        );
       case "fill-blank":
-        return <FillBlankQuestion {...commonProps} />;
+        return (
+          <FillBlankQuestion
+            question={question}
+            answer={answer as string | undefined}
+            onAnswer={(answer: string) => handleAnswer(question.id, answer)}
+            showResults={showResults}
+          />
+        );
       case "matching":
-        return <MatchingQuestion {...commonProps} />;
+        return (
+          <MatchingQuestion
+            question={question}
+            answer={answer as string[] | undefined}
+            onAnswer={(answer: string[]) => handleAnswer(question.id, answer)}
+            showResults={showResults}
+          />
+        );
       case "ordering":
-        return <OrderingQuestion {...commonProps} />;
+        return (
+          <OrderingQuestion
+            question={question}
+            answer={answer as string[] | undefined}
+            onAnswer={(answer: string[]) => handleAnswer(question.id, answer)}
+            showResults={showResults}
+          />
+        );
       default:
         return <div>Unsupported question type</div>;
     }

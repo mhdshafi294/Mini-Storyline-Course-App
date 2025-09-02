@@ -3,11 +3,6 @@
 import { useCourseStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
 
-interface StepTrackerProps {
-  currentStep: number;
-  totalSteps: number;
-}
-
 export function StepTracker() {
   const { currentStep, totalSteps } = useCourseStore();
 

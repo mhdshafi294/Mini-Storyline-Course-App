@@ -148,7 +148,7 @@ export function MatchingQuestion({
         <div className="space-y-2">
           <p className="text-sm text-gray-600 dark:text-gray-400">
             {selectedLeftItem
-              ? `Selected: "${selectedLeftItem}" - Click a match on the right`
+              ? `Selected: &quot;${selectedLeftItem}&quot; - Click a match on the right`
               : "Click an item on the left, then click its match on the right"}
           </p>
           {Object.keys(matches).length > 0 && !showResults && (
@@ -422,7 +422,9 @@ export function MatchingQuestion({
               <div className="flex items-center justify-center space-x-4">
                 <p className="text-sm text-blue-700 dark:text-blue-300">
                   Selected:{" "}
-                  <span className="font-semibold">"{selectedLeftItem}"</span>
+                  <span className="font-semibold">
+                    &quot;{selectedLeftItem}&quot;
+                  </span>
                 </p>
                 <button
                   onClick={() => setSelectedLeftItem(null)}

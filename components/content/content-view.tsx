@@ -216,7 +216,7 @@ export default function ContentView() {
               Content Completed!
             </h3>
             <p className="text-green-700 dark:text-green-300 mb-4">
-              You've finished reading all sections. Ready to continue?
+              You have finished reading all sections. Ready to continue?
             </p>
             <Button className="bg-green-600 hover:bg-green-700">
               Continue to Next Step
