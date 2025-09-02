@@ -1,15 +1,23 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   fetchStep3Content,
   type ContentData,
   type ContentSection,
 } from "@/lib/course-data/step3.content";
-import { CheckCircle, Clock } from "lucide-react";
+import { useCourseStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
+import { CheckCircle, ChevronRight, Clock } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function ContentView() {
+  const params = useParams();
+  const stepNumber = parseInt(params.n as string, 10);
+  const { setCurrentStep } = useCourseStore();
+
   const [contentData, setContentData] = useState<ContentData | null>(null);
   const [loading, setLoading] = useState(true);
   const [completedSections, setCompletedSections] = useState<Set<string>>(
@@ -218,9 +226,17 @@ export default function ContentView() {
             <p className="text-green-700 dark:text-green-300 mb-4">
               You have finished reading all sections. Ready to continue?
             </p>
-            <Button className="bg-green-600 hover:bg-green-700">
-              Continue to Next Step
-            </Button>
+            <Link
+              href={`/course/mini/step/${stepNumber + 1}`}
+              onClick={() => setCurrentStep(stepNumber + 1)}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "flex items-center space-x-2 bg-green-600 hover:bg-green-700 mx-auto cursor-pointer w-fit"
+              )}
+            >
+              <span>Continue to Next Step</span>
+              <ChevronRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       )}
