@@ -70,7 +70,7 @@ export default function QuizEngine({ stepNumber }: QuizEngineProps) {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [showResults]); // Remove timeLeft from dependencies
+  }, [timeLeft, showResults]);
 
   const handleAnswer = useCallback(
     (

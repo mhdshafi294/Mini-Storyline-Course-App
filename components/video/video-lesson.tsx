@@ -1,11 +1,19 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { fetchStep1Video, type VideoData } from "@/lib/course-data/step1.video";
+import { useCourseStore } from "@/lib/store";
+import { cn } from "@/lib/utils";
 import { Maximize2, Pause, Play, Volume2, VolumeX } from "lucide-react";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function VideoLesson() {
+  const params = useParams();
+  const stepNumber = parseInt(params.n as string, 10);
+  const { setCurrentStep } = useCourseStore();
+
   const [videoData, setVideoData] = useState<VideoData | null>(null);
   const [loading, setLoading] = useState(true);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -513,16 +521,19 @@ export default function VideoLesson() {
 
         {/* Completion Action */}
         <div className="flex justify-center pt-6">
-          <Button
-            size="lg"
-            className="px-8"
-            onClick={() => {
-              // In a real app, this would mark the step as completed
-              console.log("Video completed!");
-            }}
+          <Link
+            href={`/course/mini/step/${stepNumber + 1}`}
+            onClick={() => setCurrentStep(stepNumber + 1)}
+            className={cn(
+              buttonVariants({
+                variant: "default",
+                size: "lg",
+                className: "px-8",
+              })
+            )}
           >
             Mark as Complete
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

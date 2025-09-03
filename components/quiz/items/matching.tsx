@@ -2,7 +2,7 @@
 
 import type { QuizQuestion } from "@/lib/course-data/step2.quiz";
 import { cn } from "@/lib/utils";
-import { ArrowRight, Check, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface MatchingQuestionProps {
@@ -199,11 +199,11 @@ export function MatchingQuestion({
                     }
                   )}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1">
                     <div className="flex items-center space-x-3">
                       <div
                         className={cn(
-                          "w-3 h-3 rounded-full transition-all duration-300",
+                          "w-3 h-3 rounded-full transition-all duration-300 shrink-0",
                           {
                             "bg-blue-500 scale-125": isSelected,
                             "bg-green-500":
@@ -233,7 +233,7 @@ export function MatchingQuestion({
                     </div>
 
                     {isMatched && !showResults && (
-                      <div className="flex items-center space-x-3">
+                      <div className="flex w-full items-center gap-2 ms-5">
                         <div className="flex items-center space-x-2 px-2 py-1 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600">
                           <ArrowRight className="w-3 h-3 text-blue-500" />
                           <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
@@ -245,11 +245,11 @@ export function MatchingQuestion({
                             e.stopPropagation();
                             removeMatch(item);
                           }}
-                          className="p-1.5 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-all duration-200 group-hover:scale-110"
+                          className="p-1 hover:bg-red-100 dark:hover:bg-red-900/30 rounded-full transition-all duration-200 group-hover:scale-110 z-20"
                           type="button"
                           title="Remove match"
                         >
-                          <X className="w-4 h-4 text-red-500" />
+                          <X className="size-3 text-red-500" />
                         </button>
                       </div>
                     )}
@@ -316,11 +316,11 @@ export function MatchingQuestion({
                     }
                   )}
                 >
-                  <div className="flex items-center justify-between">
+                  <div className="flex flex-col gap-1">
                     <div className="flex items-center space-x-3">
                       <div
                         className={cn(
-                          "w-3 h-3 rounded-full transition-all duration-300",
+                          "w-3 h-3 rounded-full transition-all duration-300 shrink-0",
                           {
                             "bg-green-500":
                               isMatched && showResults && isCorrectMatch,
@@ -352,11 +352,11 @@ export function MatchingQuestion({
                     </div>
 
                     {matchedBy && !showResults && (
-                      <div className="flex items-center space-x-2 px-2 py-1 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600">
+                      <div className="ms-5 flex items-center space-x-2 px-2 py-1 bg-white dark:bg-gray-700 rounded-md border border-gray-200 dark:border-gray-600 w-fit">
                         <span className="text-xs font-medium text-blue-700 dark:text-blue-300">
                           {matchedBy}
                         </span>
-                        <ArrowRight className="w-3 h-3 text-blue-500" />
+                        <ArrowLeft className="w-3 h-3 text-blue-500" />
                       </div>
                     )}
 
@@ -371,7 +371,7 @@ export function MatchingQuestion({
                     )}
 
                     {canSelect && (
-                      <div className="text-xs text-blue-600 dark:text-blue-400 font-medium animate-pulse">
+                      <div className="ms-5 text-xs text-blue-600 dark:text-blue-400 font-medium animate-pulse">
                         Click to match
                       </div>
                     )}

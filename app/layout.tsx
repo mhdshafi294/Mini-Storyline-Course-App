@@ -64,7 +64,7 @@ export default function RootLayout({
           <div className="container mx-auto px-4 py-6">
             <div className="flex flex-col items-center justify-center space-y-2 text-center">
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                © 2024 Mini Storyline Course App. Built with Next.js and
+                © 2025 Mini Storyline Course App. Built with Next.js and
                 TypeScript.
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-500">

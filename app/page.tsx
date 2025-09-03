@@ -23,36 +23,6 @@ export default function Home() {
       <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-secondary/5 rotate-45" />
 
       <div className="relative z-10">
-        {/* Header */}
-        <header className="border-b border-border/50">
-          <div className="max-w-7xl mx-auto px-6 py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-                  <BookOpen className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="text-xl font-semibold text-foreground">
-                  Course
-                </span>
-              </div>
-              <nav className="hidden md:flex items-center space-x-8">
-                <a
-                  href="#features"
-                  className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
-                >
-                  Features
-                </a>
-                <a
-                  href="#about"
-                  className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium"
-                >
-                  About
-                </a>
-              </nav>
-            </div>
-          </div>
-        </header>
-
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-6 py-24">
           {/* Hero Section */}
@@ -296,7 +266,7 @@ export default function Home() {
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-border mt-24">
+        <footer className="mt-24">
           <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="flex items-center space-x-3 mb-4 md:mb-0">
@@ -308,7 +278,7 @@ export default function Home() {
                 </span>
               </div>
               <div className="text-sm text-muted-foreground">
-                © 2024 Course Platform. Crafted with precision.
+                © 2025 Course Platform. Crafted with precision.
               </div>
             </div>
           </div>
