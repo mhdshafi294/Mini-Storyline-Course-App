@@ -2,6 +2,7 @@
 
 import type { QuizQuestion } from "@/lib/course-data/step2.quiz";
 import { cn } from "@/lib/utils";
+import { memo, useEffect, useState } from "react";
 
 interface TrueFalseQuestionProps {
   question: QuizQuestion;
@@ -10,19 +11,28 @@ interface TrueFalseQuestionProps {
   showResults: boolean;
 }
 
-export function TrueFalseQuestion({
+export const TrueFalseQuestion = memo(function TrueFalseQuestion({
   question,
   answer,
   onAnswer,
   showResults,
 }: TrueFalseQuestionProps) {
+  const [selectedAnswer, setSelectedAnswer] = useState<string>(answer || "");
+
+  // Update local state when answer prop changes
+  useEffect(() => {
+    if (answer !== undefined) {
+      setSelectedAnswer(answer);
+    }
+  }, [answer]);
+
   const handleSelect = (selectedAnswer: string) => {
     if (showResults) return;
+    setSelectedAnswer(selectedAnswer);
     onAnswer(selectedAnswer);
   };
 
-  const isCorrect = answer === question.correctAnswer;
-  const showCorrectAnswer = showResults && question.correctAnswer;
+  const isCorrect = selectedAnswer === question.correctAnswer;
 
   return (
     <div className="space-y-4">
@@ -32,7 +42,7 @@ export function TrueFalseQuestion({
 
       <div className="grid grid-cols-2 gap-4">
         {["True", "False"].map((option) => {
-          const isSelected = answer === option;
+          const isSelected = selectedAnswer === option;
           const isCorrectOption = option === question.correctAnswer;
           const shouldHighlight =
             showResults && (isSelected || isCorrectOption);
@@ -109,4 +119,4 @@ export function TrueFalseQuestion({
       )}
     </div>
   );
-}
+});

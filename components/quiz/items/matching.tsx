@@ -3,7 +3,7 @@
 import type { QuizQuestion } from "@/lib/course-data/step2.quiz";
 import { cn } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, Check, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 interface MatchingQuestionProps {
   question: QuizQuestion;
@@ -12,7 +12,7 @@ interface MatchingQuestionProps {
   showResults: boolean;
 }
 
-export function MatchingQuestion({
+export const MatchingQuestion = memo(function MatchingQuestion({
   question,
   answer,
   onAnswer,
@@ -22,6 +22,7 @@ export function MatchingQuestion({
   const [leftItems, setLeftItems] = useState<string[]>([]);
   const [rightItems, setRightItems] = useState<string[]>([]);
   const [selectedLeftItem, setSelectedLeftItem] = useState<string | null>(null);
+  const previousAnswerRef = useRef<string[]>([]);
 
   // Initialize items and matches only when question changes
   useEffect(() => {
@@ -102,13 +103,21 @@ export function MatchingQuestion({
   useEffect(() => {
     const answerArray: string[] = [];
     Object.entries(matches).forEach(([left, right]) => {
-      answerArray.push(left, right);
+      answerArray.push(`${left}-${right}`);
     });
-    // Only call onAnswer if we have actual matches to avoid unnecessary updates
-    if (answerArray.length > 0 || Object.keys(matches).length === 0) {
+
+    // Only call onAnswer if the answer actually changed
+    const answerChanged =
+      answerArray.length !== previousAnswerRef.current.length ||
+      !answerArray.every(
+        (item, index) => item === previousAnswerRef.current[index]
+      );
+
+    if (answerChanged) {
+      previousAnswerRef.current = answerArray;
       onAnswer(answerArray);
     }
-  }, [matches]); // Removed onAnswer from dependencies to prevent unnecessary re-renders
+  }, [matches, onAnswer]);
 
   const isCorrect = () => {
     if (!Array.isArray(question.correctAnswer)) return false;
@@ -118,12 +127,8 @@ export function MatchingQuestion({
       userMatches.push(`${left}-${right}`);
     });
 
-    const correctMatches: string[] = [];
-    for (let i = 0; i < question.correctAnswer.length; i += 2) {
-      correctMatches.push(
-        `${question.correctAnswer[i]}-${question.correctAnswer[i + 1]}`
-      );
-    }
+    // correctAnswer is already in the correct format: ["left-right", "left-right", ...]
+    const correctMatches = question.correctAnswer as string[];
 
     return (
       userMatches.length === correctMatches.length &&
@@ -502,4 +507,4 @@ export function MatchingQuestion({
       )}
     </div>
   );
-}
+});

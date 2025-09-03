@@ -18,7 +18,7 @@ interface CourseState {
 
 export const useCourseStore = create<CourseState>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       currentStep: 1,
       completedSteps: [],
       quizScores: {},

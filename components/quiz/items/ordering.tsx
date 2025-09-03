@@ -20,7 +20,7 @@ import {
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { Check, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useRef, useState } from "react";
 
 interface OrderingQuestionProps {
   question: QuizQuestion;
@@ -37,7 +37,7 @@ interface SortableItemProps {
   isCorrectPosition: boolean;
 }
 
-function SortableItem({
+const SortableItem = memo(function SortableItem({
   id,
   item,
   index,
@@ -142,15 +142,16 @@ function SortableItem({
       )}
     </div>
   );
-}
+});
 
-export function OrderingQuestion({
+export const OrderingQuestion = memo(function OrderingQuestion({
   question,
   answer,
   onAnswer,
   showResults,
 }: OrderingQuestionProps) {
   const [items, setItems] = useState<string[]>([]);
+  const previousAnswerRef = useRef<string[]>([]);
 
   // Set up sensors for drag and drop
   const sensors = useSensors(
@@ -174,11 +175,16 @@ export function OrderingQuestion({
   }, [question.options, answer]);
 
   useEffect(() => {
-    // Update parent whenever items change
-    if (items.length > 0) {
+    // Only call onAnswer if the answer actually changed
+    const answerChanged =
+      items.length !== previousAnswerRef.current.length ||
+      !items.every((item, index) => item === previousAnswerRef.current[index]);
+
+    if (answerChanged) {
+      previousAnswerRef.current = [...items];
       onAnswer(items);
     }
-  }, [items]); // Remove onAnswer from dependencies since it's now stable with useCallback
+  }, [items, onAnswer]);
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
@@ -340,4 +346,4 @@ export function OrderingQuestion({
       </div>
     </div>
   );
-}
+});

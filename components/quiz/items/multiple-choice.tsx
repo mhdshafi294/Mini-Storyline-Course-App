@@ -2,7 +2,7 @@
 
 import type { QuizQuestion } from "@/lib/course-data/step2.quiz";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { memo, useState } from "react";
 
 interface MultipleChoiceQuestionProps {
   question: QuizQuestion;
@@ -11,7 +11,7 @@ interface MultipleChoiceQuestionProps {
   showResults: boolean;
 }
 
-export function MultipleChoiceQuestion({
+export const MultipleChoiceQuestion = memo(function MultipleChoiceQuestion({
   question,
   answer,
   onAnswer,
@@ -133,4 +133,4 @@ export function MultipleChoiceQuestion({
       )}
     </div>
   );
-}
+});

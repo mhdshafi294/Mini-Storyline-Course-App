@@ -2,7 +2,7 @@
 
 import type { QuizQuestion } from "@/lib/course-data/step2.quiz";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { memo, useEffect, useState } from "react";
 
 interface FillBlankQuestionProps {
   question: QuizQuestion;
@@ -11,13 +11,20 @@ interface FillBlankQuestionProps {
   showResults: boolean;
 }
 
-export function FillBlankQuestion({
+export const FillBlankQuestion = memo(function FillBlankQuestion({
   question,
   answer,
   onAnswer,
   showResults,
 }: FillBlankQuestionProps) {
   const [inputValue, setInputValue] = useState<string>(answer || "");
+
+  // Update local state when answer prop changes
+  useEffect(() => {
+    if (answer !== undefined) {
+      setInputValue(answer);
+    }
+  }, [answer]);
 
   const handleChange = (value: string) => {
     if (showResults) return;
@@ -105,4 +112,4 @@ export function FillBlankQuestion({
       </div>
     </div>
   );
-}
+});
