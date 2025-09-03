@@ -1,12 +1,12 @@
 "use client";
 
 import { buttonVariants } from "@/components/ui/button";
-import { fetchStep1Video, type VideoData } from "@/lib/course-data/step1.video";
+import { fetchStep1Video } from "@/lib/course-data/step1.video";
 import { useCourseStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
 import VideoPlayer from "./video-player";
 
 export default function VideoLesson() {
@@ -14,26 +14,18 @@ export default function VideoLesson() {
   const stepNumber = parseInt(params.n as string, 10);
   const { setCurrentStep } = useCourseStore();
 
-  const [videoData, setVideoData] = useState<VideoData | null>(null);
-  const [loading, setLoading] = useState(true);
+  // Load video data with React Query
+  const {
+    data: videoData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["video", "step1"],
+    queryFn: fetchStep1Video,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
-  // Load video data
-  useEffect(() => {
-    const loadVideo = async () => {
-      try {
-        const data = await fetchStep1Video();
-        setVideoData(data);
-      } catch (error) {
-        console.error("Failed to load video:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadVideo();
-  }, []);
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Video Loading Skeleton */}
@@ -59,7 +51,7 @@ export default function VideoLesson() {
     );
   }
 
-  if (!videoData) {
+  if (error) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
@@ -67,7 +59,7 @@ export default function VideoLesson() {
             Failed to Load Video
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Please try refreshing the page.
+            {error.message || "Please try refreshing the page."}
           </p>
         </div>
       </div>
@@ -78,9 +70,9 @@ export default function VideoLesson() {
     <div className="max-w-4xl mx-auto space-y-6">
       {/* Video Player */}
       <VideoPlayer
-        src={videoData.videoUrl}
+        src={videoData!.videoUrl}
         poster={
-          videoData.thumbnailUrl ||
+          videoData!.thumbnailUrl ||
           "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=800&h=450&fit=crop&crop=center"
         }
         onLoad={(duration) => console.log("Video loaded, duration:", duration)}
@@ -93,10 +85,10 @@ export default function VideoLesson() {
       <div className="space-y-4">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-            {videoData.title}
+            {videoData!.title}
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300">
-            {videoData.description}
+            {videoData!.description}
           </p>
         </div>
 
@@ -106,7 +98,7 @@ export default function VideoLesson() {
             Transcript
           </h3>
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            {videoData.transcript}
+            {videoData!.transcript}
           </p>
         </div>
 

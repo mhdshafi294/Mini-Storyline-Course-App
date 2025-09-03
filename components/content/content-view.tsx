@@ -3,41 +3,35 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   fetchStep3Content,
-  type ContentData,
   type ContentSection,
 } from "@/lib/course-data/step3.content";
 import { useCourseStore } from "@/lib/store";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
 import { CheckCircle, ChevronRight, Clock } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ContentView() {
   const params = useParams();
   const stepNumber = parseInt(params.n as string, 10);
   const { setCurrentStep } = useCourseStore();
 
-  const [contentData, setContentData] = useState<ContentData | null>(null);
-  const [loading, setLoading] = useState(true);
   const [completedSections, setCompletedSections] = useState<Set<string>>(
     new Set()
   );
 
-  useEffect(() => {
-    const loadContent = async () => {
-      try {
-        const data = await fetchStep3Content();
-        setContentData(data);
-      } catch (error) {
-        console.error("Failed to load content:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadContent();
-  }, []);
+  // Load content data with React Query
+  const {
+    data: contentData,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["content", "step3"],
+    queryFn: fetchStep3Content,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+  });
 
   const markSectionComplete = (sectionId: string) => {
     setCompletedSections((prev) => new Set([...prev, sectionId]));
@@ -143,7 +137,7 @@ export default function ContentView() {
     );
   };
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="space-y-4">
@@ -162,7 +156,7 @@ export default function ContentView() {
     );
   }
 
-  if (!contentData) {
+  if (error) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
@@ -170,7 +164,7 @@ export default function ContentView() {
             Failed to Load Content
           </h2>
           <p className="text-gray-600 dark:text-gray-400">
-            Please try refreshing the page.
+            {error.message || "Please try refreshing the page."}
           </p>
         </div>
       </div>
@@ -178,7 +172,7 @@ export default function ContentView() {
   }
 
   const completionPercentage = Math.round(
-    (completedSections.size / contentData.sections.length) * 100
+    (completedSections.size / contentData!.sections.length) * 100
   );
 
   return (
@@ -186,17 +180,17 @@ export default function ContentView() {
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-          {contentData.title}
+          {contentData!.title}
         </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          {contentData.description}
+          {contentData!.description}
         </p>
 
         {/* Progress and Time */}
         <div className="flex items-center justify-center space-x-6 text-sm text-gray-500 dark:text-gray-400">
           <div className="flex items-center space-x-1">
             <Clock className="w-4 h-4" />
-            <span>{contentData.estimatedReadTime} min read</span>
+            <span>{contentData!.estimatedReadTime} min read</span>
           </div>
           <div>
             <span>{completionPercentage}% Complete</span>
@@ -213,7 +207,9 @@ export default function ContentView() {
       </div>
 
       {/* Content Sections */}
-      <div className="space-y-6">{contentData.sections.map(renderSection)}</div>
+      <div className="space-y-6">
+        {contentData!.sections.map(renderSection)}
+      </div>
 
       {/* Completion Action */}
       {completionPercentage === 100 && (
