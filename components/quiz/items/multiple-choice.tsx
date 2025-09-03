@@ -64,7 +64,7 @@ export const MultipleChoiceQuestion = memo(function MultipleChoiceQuestion({
               <div className="flex items-center space-x-3">
                 <div
                   className={cn(
-                    "w-4 h-4 rounded-full border-2 flex items-center justify-center",
+                    "w-4 h-4 rounded-full border-2 flex items-center justify-center shrink-0",
                     {
                       "border-blue-500 bg-blue-500": isSelected && !showResults,
                       "border-green-500 bg-green-500":
