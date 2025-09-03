@@ -72,9 +72,9 @@ export default function Home() {
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-6 py-24">
           {/* Hero Section */}
-          <div className="grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 items-center mb-16 sm:mb-24 lg:mb-64 ">
+          <div className="grid lg:grid-cols-2 gap-20 items-center mb-16 sm:mb-24 lg:mb-64 ">
             <div
-              className={`space-y-12 transition-all duration-1000 ${
+              className={`space-y-12 transition-all duration-1000 min-h-[calc(90dvh-15rem)] md:min-h-fit ${
                 isVisible
                   ? "translate-y-0 opacity-100"
                   : "translate-y-8 opacity-0"
