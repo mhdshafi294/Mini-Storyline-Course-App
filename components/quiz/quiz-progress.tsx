@@ -25,3 +25,4 @@ export function QuizProgress({
     </div>
   );
 }
+

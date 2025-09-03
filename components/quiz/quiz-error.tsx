@@ -14,3 +14,4 @@ export function QuizError() {
     </div>
   );
 }
+
