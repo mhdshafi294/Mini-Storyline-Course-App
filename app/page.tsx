@@ -25,7 +25,7 @@ export default function Home() {
       {/* Enhanced Swiss-Style Background */}
       <div className="absolute inset-0">
         {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.09)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.7)_1px,transparent_1px)] bg-[size:32px_32px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(255,255,255,0.3)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.3)_1px,transparent_1px)] bg-[size:32px_32px]" />
 
         {/* Radial Gradient Overlays */}
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-radial from-primary/[0.02] via-transparent to-transparent" />
@@ -72,7 +72,7 @@ export default function Home() {
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-6 py-24">
           {/* Hero Section */}
-          <div className="grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 items-center mb-16 sm:mb-24 lg:mb-32">
+          <div className="grid lg:grid-cols-2 gap-12 sm:gap-16 lg:gap-20 items-center mb-16 sm:mb-24 lg:mb-64 ">
             <div
               className={`space-y-12 transition-all duration-1000 ${
                 isVisible
