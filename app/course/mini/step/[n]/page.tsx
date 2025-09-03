@@ -8,9 +8,8 @@ import { Suspense, useEffect } from "react";
 
 // Lazy load components for each step type
 const Step1Video = lazy(() => import("@/components/video/video-lesson"));
-const Step2Quiz = lazy(() => import("@/components/quiz/quiz-engine"));
+const StepQuiz = lazy(() => import("@/components/quiz/quiz-engine"));
 const Step3Content = lazy(() => import("@/components/content/content-view"));
-const Step4Quiz = lazy(() => import("@/components/quiz/quiz-engine"));
 
 import { lazy } from "react";
 
@@ -29,11 +28,11 @@ export default function StepPage() {
       case 1:
         return <Step1Video />;
       case 2:
-        return <Step2Quiz stepNumber={2} />;
+        return <StepQuiz stepNumber={2} />;
       case 3:
         return <Step3Content />;
       case 4:
-        return <Step4Quiz stepNumber={4} />;
+        return <StepQuiz stepNumber={4} />;
       default:
         return (
           <div className="flex items-center justify-center min-h-[400px]">
